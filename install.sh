@@ -5,20 +5,8 @@ __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 __base="$(basename ${__file} .sh)"
 __root="$(cd "$(dirname "${__dir}")" && pwd)" 
 
-echo $__dir
-echo $__file
-echo $__base
-echo $__root
-
+echo "$__dir"
 echo 
-
-
-# check
-if [ -z $HOME ];then
-	echo "HOME not exists"
-else
-	echo "HOME = $HOME"
-fi
 
 # ln 
 # file e.g: ln -sf sync/vim/.vimrc $HOME/.vimrc
@@ -30,3 +18,6 @@ set -o nounset
 
 # vim config
 ln -sf ${__dir}/sync/vim/.vimrc $HOME/.vimrc
+
+# phoenix config
+ln -snf ${__dir}/sync/phoenix $HOME/.config/phoenix
