@@ -20,6 +20,10 @@ function alert(message) {
    modal.show();
 }
 
+function log(obj) {
+   Phoenix.log(JSON.stringify(obj))
+}
+
 function assert(condition, message) {
    if (!condition) {
       throw message || "Assertion failed";
@@ -385,10 +389,10 @@ function halfLeft() {
    var of = window.frame()
 
    // set size
-   window.setSize({width: fvf.width/2-1, height : fvf.height})
+   window.setSize({width: fvf.width/2-1, height : of.height})
 
    // set point
-   window.setTopLeft({x: 0, y : 0})
+   window.setTopLeft({x: fvf.x, y : of.y})
 }
 
 keys.push(new Key('h', cmdCtrl, halfLeft))
@@ -402,10 +406,10 @@ function halfRight() {
    var of = window.frame()
 
    // set size
-   window.setSize({width: fvf.width/2-1, height : fvf.height})
+   window.setSize({width: fvf.width/2-1, height : of.height})
 
    // set point
-   window.setTopLeft({x: fvf.width/2+1, y : 0})
+   window.setTopLeft({x: fvf.x + fvf.width/2+1, y : of.y})
 }
 
 keys.push(new Key('l', cmdCtrl, halfRight))
@@ -418,12 +422,9 @@ function halfTop() {
    var fvf = window.screen().flippedVisibleFrame()
    var of = window.frame()
 
-   // set size
-   window.setTopLeft({x: of.x, y : 0})
+   window.setTopLeft({x: of.x, y : fvf.y})
    window.setSize({width: of.width, height : fvf.height/2-1})
 
-   // set point
-   // nothing
 }
 
 keys.push(new Key('k', cmdCtrl, halfTop))
@@ -436,15 +437,12 @@ function halfButtom() {
    
    var fvf = window.screen().flippedVisibleFrame()
    var of = window.frame()
-   if (of.y > 100) {
-      return;
-   }
 
    // set size
    window.setSize({width: of.width, height : fvf.height/2-1})
 
    // set point
-   window.setTopLeft({x: of.x , y : of.y + fvf.height/2+1})
+   window.setTopLeft({x: of.x , y : fvf.y + fvf.height/2+1})
 }
 
 keys.push(new Key('j', cmdCtrl, halfButtom))
@@ -583,17 +581,98 @@ var test_screen = function() {
    var spaces = screen.spaces();
    var windows = screen.windows();
 
-   Phoenix.notify(JSON.stringify(frame))
-   Phoenix.notify(JSON.stringify(visibleFrame))
-   Phoenix.notify(JSON.stringify(flippedFrame))
-   Phoenix.notify(JSON.stringify(flippedVisibleFrame))
+   //Phoenix.log(JSON.stringify(frame))
+   //Phoenix.log(JSON.stringify(visibleFrame))
+   //Phoenix.log(JSON.stringify(flippedFrame))
+   //Phoenix.log(JSON.stringify(flippedVisibleFrame))
+
+   log(space.hash())
+
+   log(windows)
+   if(windows.length ==1) {
+      var win = windows[0]
+      log(win.title())
+   }
+
+   nfws = _.filter(windows, function(it) {return it.app().bundleIdentifier() != "com.apple.finder"})
+   
+   log(nfws.length)
+
+   if(nfws.length == 1) {
+      _.map(nfws, function(it) {it.maximize()})
+   }
+
+   if(nfws.length == 2) {
+      // 左右并排
+      left = nfws[0]
+      right = nfws[1]
+
+      var fvf = left.screen().flippedVisibleFrame()
+
+      var lf = left.frame()
+      left.setSize({width: fvf.width/2-1, height : fvf.height})
+      left.setTopLeft({x: fvf.x, y : fvf.y})
+
+
+      var rf = right.frame()
+      right.setSize({width: fvf.width/2-1, height : fvf.height})
+      right.setTopLeft({x: fvf.x + fvf.width/2+1, y : fvf.y})
+   }
+
+   if(nfws.length == 3) {
+      // 左中右并排
+      left = nfws[0]
+      mid= nfws[1]
+      right = nfws[2]
+
+      var fvf = left.screen().flippedVisibleFrame()
+
+      var lf = left.frame()
+      left.setSize({width: fvf.width/3-1, height : fvf.height})
+      left.setTopLeft({x: fvf.x, y : fvf.y})
+
+      var mf = mid.frame()
+      mid.setSize({width: fvf.width/3-1, height : fvf.height})
+      mid.setTopLeft({x: fvf.x + fvf.width/3 + 1, y : fvf.y})
+
+
+      var rf = right.frame()
+      right.setSize({width: fvf.width/3-1, height : fvf.height})
+      right.setTopLeft({x: fvf.x + fvf.width/3 * 2 +2, y : fvf.y})
+   }
+
+   if(nfws.length == 4) {
+      // 4宫格
+      tl= nfws[0]
+      tr= nfws[1]
+      bl= nfws[2]
+      br= nfws[3]
+
+      var fvf = tl.screen().flippedVisibleFrame()
+
+      var tlf = tl.frame()
+      tl.setSize({width: fvf.width/2-1, height : fvf.height/2-1})
+      tl.setTopLeft({x: fvf.x, y : fvf.y})
+
+      var trf = tr.frame()
+      tr.setSize({width: fvf.width/2-1, height : fvf.height/2-1})
+      tr.setTopLeft({x: fvf.x + fvf.width/2 + 1, y : fvf.y})
+
+      var blf = bl.frame()
+      bl.setSize({width: fvf.width/2-1, height : fvf.height/2-1})
+      bl.setTopLeft({x: fvf.x, y : fvf.y + fvf.height/2+1})
+
+      var brf = br.frame()
+      br.setSize({width: fvf.width/2-1, height : fvf.height/2-1})
+      br.setTopLeft({x: fvf.x + fvf.width/2 + 1, y : fvf.y + fvf.height/2+1})
+   }
 }
 
 function test_fullscreen() {
 }
 
 // Test
-keys.push(new Key('n', ['ctrl','alt'], function() {
+keys.push(new Key('g', ['ctrl','cmd'], function() {
    test_screen()
 }));
 // vim: set ft=javascript sw=3:
