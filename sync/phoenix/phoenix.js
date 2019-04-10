@@ -1,47 +1,33 @@
-var keys = [];
+require("utils.js")
+require("mouse.js")
+require("app.js")
+require("config.js")
 
-var cmd = ['cmd'];
+log(CONFIG)
+
+var keys = [];
 var mash = ["alt"];
 var mashShift = ["alt", "shift"];
 var mashCtrl = ["alt", "ctrl"];
-var cmdCtrl= ['cmd', 'ctrl'];
+var cmdCtrl = ['cmd', 'ctrl'];
 
-var mousePositions = {};
 var ACTIVE_WINDOWS_TIMES = {};
 var A_BIG_PIXEL = 10000;
 
 /**
  * Utils Functions
  */
-function alert(message) {
-   var modal = new Modal();
-   modal.message = message;
-   modal.duration = 1;
-   modal.show();
-}
 
-function log(obj) {
-   Phoenix.log(JSON.stringify(obj))
-}
-
-function assert(condition, message) {
-   if (!condition) {
-      throw message || "Assertion failed";
-   }
-}
 
 function sortByMostRecent(windows) {
    var visibleAppMostRecentFirst = _.map(
-      Window.recent(), function(w) { return w.hash(); }
+      Window.recent(), function (w) { return w.hash(); }
    );
    var visibleAppMostRecentFirstWithWeight = _.zipObject(
       visibleAppMostRecentFirst, _.range(visibleAppMostRecentFirst.length)
    );
-   return _.sortBy(windows, function(window) { return visibleAppMostRecentFirstWithWeight[window.hash()]; });
+   return _.sortBy(windows, function (window) { return visibleAppMostRecentFirstWithWeight[window.hash()]; });
 };
-
-function getNewFrame(frame, oldScreenRect, newScreenRect) {
-}
 
 function getResizeFrame(frame, ratio) {
    var mid_pos_x = frame.x + 0.5 * frame.width;
@@ -100,9 +86,9 @@ function moveToScreen(window, screen) {
 
 function windowsOnOtherScreen() {
    var otherWindowsOnSameScreen = Window.focused().others({ screen: Window.focused().screen() });  // slow
-   var otherWindowTitlesOnSameScreen = _.map(otherWindowsOnSameScreen , function(w) { return w.title(); });
+   var otherWindowTitlesOnSameScreen = _.map(otherWindowsOnSameScreen, function (w) { return w.title(); });
    var return_value = _.chain(Window.focused().others())
-      .filter(function(window) { return ! _.includes(otherWindowTitlesOnSameScreen, window.title()); })
+      .filter(function (window) { return !_.includes(otherWindowTitlesOnSameScreen, window.title()); })
       .value();
    return return_value;
 };
@@ -119,10 +105,10 @@ function getAnotherWindowsOnSameScreen(window, offset, isCycle) {
    var windows = window.others({ visible: true, screen: window.screen() });
    windows.push(window);
    var screen = window.screen();
-   windows = _.chain(windows).sortBy(function(window) {
+   windows = _.chain(windows).sortBy(function (window) {
       return [(A_BIG_PIXEL + window.frame().y - screen.flippedFrame().y) +
          (A_BIG_PIXEL + window.frame().x - screen.flippedFrame().y),
-         window.app().pid, window.title()].join('');
+      window.app().pid, window.title()].join('');
    }).value();
    if (isCycle) {
       var index = (_.indexOf(windows, window) + offset + windows.length) % windows.length;
@@ -151,82 +137,11 @@ function setWindowCentral(window) {
       x: (window.screen().flippedFrame().width - window.size().width) / 2 + window.screen().flippedFrame().x,
       y: (window.screen().flippedFrame().height - window.size().height) / 2 + window.screen().flippedFrame().y
    });
-   heartbeat_window(window);
 };
-
-
-/**
- * Mouse Functions
- */
-
-function save_mouse_position_for_window(window) {
-   if (!window) return;
-   heartbeat_window(window);
-   var pos = Mouse.location()
-   //pos.y = 800 - pos.y;  // fix phoenix 2.x bug
-   mousePositions[window.hash()] = pos;
-}
-
-function set_mouse_position_for_window_center(window) {
-   Mouse.move({
-      x: window.topLeft().x + window.frame().width / 2,
-      y: window.topLeft().y + window.frame().height / 2
-   });
-   heartbeat_window(window);
-}
-
-function restore_mouse_position_for_window(window) {
-   if (!mousePositions[window.hash()]) {
-      set_mouse_position_for_window_center(window);
-      return;
-   }
-   var pos = mousePositions[window.hash()];
-   var rect = window.frame();
-   if (pos.x < rect.x || pos.x > (rect.x + rect.width) || pos.y < rect.y || pos. y > (rect.y + rect.height)) {
-      set_mouse_position_for_window_center(window);
-      return;
-   }
-   //Phoenix.log(String.format('x: {0}, y: {1}', pos.x, pos.y));
-   Mouse.move(pos);
-   heartbeat_window(window);
-}
-
-function restore_mouse_position_for_now() {
-   if (Window.focused() === undefined) {
-      return;
-   }
-   restore_mouse_position_for_window(Window.focused());
-}
-
-
-/**
- * App Functions
- */
-
-function launchOrFocus(appName) {
-   var app = App.launch(appName);
-   assert(app !== undefined);
-   app.focus();
-   return app;
-}
-
-//switch app, and remember mouse position
-function callApp(appName) {
-   var window = Window.focused();
-   if (window) {
-      save_mouse_position_for_window(window);
-   }
-   //App.launch(appName);
-   var newWindow = _.first(launchOrFocus(appName).windows());
-   if (newWindow && window !== newWindow) {
-      restore_mouse_position_for_window(newWindow);
-   }
-}
 
 /**
  * My Configuartion Global
  */
-
 Phoenix.set({
    'daemon': false,
    'openAtLogin': true
@@ -254,7 +169,7 @@ function focusAnotherScreen(window, targetScreen) {
 }
 
 // Next screen
-keys.push(new Key('l', mashCtrl, function() {
+keys.push(new Key('l', mashCtrl, function () {
    var window = getCurrentWindow();
    if (window === undefined) {
       return;
@@ -265,15 +180,15 @@ keys.push(new Key('l', mashCtrl, function() {
       return; // TODO use mouse to find current screen
    }
    var targetScreen = currentScreen.next();
-   if (_.indexOf(_.map(allScreens, function(x) { return x.hash(); }), targetScreen.hash())
-      >= _.indexOf(_.map(allScreens, function(x) { return x.hash(); }), currentScreen.hash())) {
+   if (_.indexOf(_.map(allScreens, function (x) { return x.hash(); }), targetScreen.hash())
+      >= _.indexOf(_.map(allScreens, function (x) { return x.hash(); }), currentScreen.hash())) {
       return;
    }
    focusAnotherScreen(window, targetScreen);
 }));
 
 // Previous Screen
-keys.push(new Key('h', mashCtrl, function() {
+keys.push(new Key('h', mashCtrl, function () {
    var window = getCurrentWindow();
    if (window === undefined) {
       return;
@@ -284,15 +199,15 @@ keys.push(new Key('h', mashCtrl, function() {
       return; // TODO use mouse to find current screen
    }
    var targetScreen = currentScreen.previous();
-   if (_.indexOf(_.map(allScreens, function(x) { return x.hash(); }), targetScreen.hash())
-      <= _.indexOf(_.map(allScreens, function(x) { return x.hash(); }), currentScreen.hash())) {
+   if (_.indexOf(_.map(allScreens, function (x) { return x.hash(); }), targetScreen.hash())
+      <= _.indexOf(_.map(allScreens, function (x) { return x.hash(); }), currentScreen.hash())) {
       return;
    }
    focusAnotherScreen(window, targetScreen);
 }));
 
 // Move Current Window to Next Screen
-keys.push(new Key('l', mashShift, function() {
+keys.push(new Key('l', mashShift, function () {
    var window = getCurrentWindow();
    if (window === undefined) {
       return;
@@ -307,7 +222,7 @@ keys.push(new Key('l', mashShift, function() {
 }));
 
 // Move Current Window to Previous Screen
-keys.push(new Key('h', mashShift, function() {
+keys.push(new Key('h', mashShift, function () {
    var window = getCurrentWindow();
    if (window === undefined) {
       return;
@@ -349,7 +264,7 @@ function fullscreen() {
 keys.push(new Key('f', cmdCtrl, fullscreen));
 
 // Window Smaller
-function windowSmaller(){
+function windowSmaller() {
    var window = getCurrentWindow();
    if (window === undefined) {
       return;
@@ -389,10 +304,10 @@ function halfLeft() {
    var of = window.frame()
 
    // set size
-   window.setSize({width: fvf.width/2-1, height : of.height})
+   window.setSize({ width: fvf.width / 2 - 1, height: of.height })
 
    // set point
-   window.setTopLeft({x: fvf.x, y : of.y})
+   window.setTopLeft({ x: fvf.x, y: of.y })
 }
 
 keys.push(new Key('h', cmdCtrl, halfLeft))
@@ -406,10 +321,10 @@ function halfRight() {
    var of = window.frame()
 
    // set size
-   window.setSize({width: fvf.width/2-1, height : of.height})
+   window.setSize({ width: fvf.width / 2 - 1, height: of.height })
 
    // set point
-   window.setTopLeft({x: fvf.x + fvf.width/2+1, y : of.y})
+   window.setTopLeft({ x: fvf.x + fvf.width / 2 + 1, y: of.y })
 }
 
 keys.push(new Key('l', cmdCtrl, halfRight))
@@ -422,8 +337,8 @@ function halfTop() {
    var fvf = window.screen().flippedVisibleFrame()
    var of = window.frame()
 
-   window.setTopLeft({x: of.x, y : fvf.y})
-   window.setSize({width: of.width, height : fvf.height/2-1})
+   window.setTopLeft({ x: of.x, y: fvf.y })
+   window.setSize({ width: of.width, height: fvf.height / 2 - 1 })
 
 }
 
@@ -434,21 +349,21 @@ function halfButtom() {
    if (window === undefined) {
       return;
    }
-   
+
    var fvf = window.screen().flippedVisibleFrame()
    var of = window.frame()
 
    // set size
-   window.setSize({width: of.width, height : fvf.height/2-1})
+   window.setSize({ width: of.width, height: fvf.height / 2 - 1 })
 
    // set point
-   window.setTopLeft({x: of.x , y : fvf.y + fvf.height/2+1})
+   window.setTopLeft({ x: of.x, y: fvf.y + fvf.height / 2 + 1 })
 }
 
 keys.push(new Key('j', cmdCtrl, halfButtom))
 
 // Window Central
-keys.push(new Key('n', cmdCtrl, function() {
+keys.push(new Key('n', cmdCtrl, function () {
    var window = getCurrentWindow();
    if (window === undefined) {
       return;
@@ -456,53 +371,8 @@ keys.push(new Key('n', cmdCtrl, function() {
    setWindowCentral(window);
 }));
 
-// Window Height
-keys.push(new Key('\\', mash, function() {
-   var window = getCurrentWindow();
-   if (window === undefined) {
-      return;
-   }
-   window.setFrame({
-      x: window.frame().x,
-      y: window.screen().flippedFrame().y,
-      width: window.frame().width,
-      height: window.screen().flippedFrame().height
-   });
-   heartbeat_window(window);
-}));
-
-// Window Width
-keys.push(new Key('\\', mashShift, function() {
-   var window = getCurrentWindow();
-   if (window === undefined) {
-      return;
-   }
-   window.setFrame({
-      x: window.screen().flippedFrame().x,
-      y: window.frame().y,
-      width: window.screen().flippedFrame().width,
-      height: window.frame().height
-   });
-   heartbeat_window(window);
-}));
-
-// Window >
-keys.push(new Key('l', mashCtrl, function() {
-   var window = getCurrentWindow();
-   if (window === undefined) {
-      return;
-   }
-   window.setFrame({
-      x: window.frame().x + 100,
-      y: window.frame().y,
-      width: window.frame().width,
-      height: window.frame().height
-   });
-   heartbeat_window(window);
-}));
-
 // Previous Window in One Screen
-keys.push(new Key('k', mash, function() {
+keys.push(new Key('k', mash, function () {
    var window = Window.focused();
    if (!window) {
       if (Window.recent().length == 0) return;
@@ -519,7 +389,7 @@ keys.push(new Key('k', mash, function() {
 }));
 
 // Next Window in One Screen
-keys.push(new Key('j', mash, function() {
+keys.push(new Key('j', mash, function () {
    var window = Window.focused();
    if (!window) {
       if (Window.recent().length == 0) return;
@@ -540,7 +410,7 @@ keys.push(new Key('j', mash, function() {
  * My Configuartion Mouse
  */
 // Central Mouse
-keys.push(new Key('m', cmdCtrl, function() {
+keys.push(new Key('m', cmdCtrl, function () {
    var window = getCurrentWindow();
    if (window === undefined) {
       return;
@@ -553,22 +423,13 @@ keys.push(new Key('m', cmdCtrl, function() {
  */
 
 // Launch App
-keys.push(new Key('1', mash, function() { callApp('IntelliJ IDEA'); }));
-keys.push(new Key('2', mash, function() { callApp('Charles'); }));
-keys.push(new Key('3', mash, function() { callApp('Paw'); }));
-keys.push(new Key('q', mash, function() { callApp('Google Chrome'); }));
-keys.push(new Key('7', mash, function() { callApp('PyCharm'); }));
-keys.push(new Key('8', mash, function() { callApp('MarkEditor'); }));
-keys.push(new Key('9', mash, function() { callApp('Tower'); }));
-keys.push(new Key('u', mash, function() { callApp('QQ'); }));
-keys.push(new Key('i', mash, function() { callApp('WeChat'); }));
-keys.push(new Key(',', mash, function() { callApp('MailMaster'); }));
-//keys.push(new Key('.', mash, function() { callApp('NeteaseMusic'); })); // mig to QQMusic
-keys.push(new Key('.', mash, function() { callApp('QQMusic'); }));
-keys.push(new Key('/', mash, function() { callApp('Finder'); }));
+var prefix = CONFIG.APP.prefix
 
+_.map(CONFIG.APP.apps, function (it) {
+   Key.on(it.key, prefix, function () { callApp(it.name) })
+})
 
-var test_screen = function() {
+var test_screen = function () {
    var screen = Screen.main()
    var allScreen_a_s = Screen.all()
 
@@ -586,18 +447,18 @@ var test_screen = function() {
    //Phoenix.log(JSON.stringify(flippedFrame))
    //Phoenix.log(JSON.stringify(flippedVisibleFrame))
 
-   if(windows.length ==1) {
+   if (windows.length == 1) {
       log(win.title())
    }
 
-   nfws = _.filter(windows, function(it) {return it.app().bundleIdentifier() != "com.apple.finder"})
-   
+   nfws = _.filter(windows, function (it) { return it.app().bundleIdentifier() != "com.apple.finder" })
 
-   if(nfws.length == 1) {
-      _.map(nfws, function(it) {it.maximize()})
+
+   if (nfws.length == 1) {
+      _.map(nfws, function (it) { it.maximize() })
    }
 
-   if(nfws.length == 2) {
+   if (nfws.length == 2) {
       // 左右并排
       left = nfws[0]
       right = nfws[1]
@@ -605,69 +466,66 @@ var test_screen = function() {
       var fvf = left.screen().flippedVisibleFrame()
 
       var lf = left.frame()
-      left.setSize({width: fvf.width/2-1, height : fvf.height})
-      left.setTopLeft({x: fvf.x, y : fvf.y})
+      left.setSize({ width: fvf.width / 2 - 1, height: fvf.height })
+      left.setTopLeft({ x: fvf.x, y: fvf.y })
 
 
       var rf = right.frame()
-      right.setSize({width: fvf.width/2-1, height : fvf.height})
-      right.setTopLeft({x: fvf.x + fvf.width/2+1, y : fvf.y})
+      right.setSize({ width: fvf.width / 2 - 1, height: fvf.height })
+      right.setTopLeft({ x: fvf.x + fvf.width / 2 + 1, y: fvf.y })
    }
 
-   if(nfws.length == 3) {
+   if (nfws.length == 3) {
       // 左中右并排
       left = nfws[0]
-      mid= nfws[1]
+      mid = nfws[1]
       right = nfws[2]
 
       var fvf = left.screen().flippedVisibleFrame()
 
       var lf = left.frame()
-      left.setSize({width: fvf.width/3-1, height : fvf.height})
-      left.setTopLeft({x: fvf.x, y : fvf.y})
+      left.setSize({ width: fvf.width / 3 - 1, height: fvf.height })
+      left.setTopLeft({ x: fvf.x, y: fvf.y })
 
       var mf = mid.frame()
-      mid.setSize({width: fvf.width/3-1, height : fvf.height})
-      mid.setTopLeft({x: fvf.x + fvf.width/3 + 1, y : fvf.y})
+      mid.setSize({ width: fvf.width / 3 - 1, height: fvf.height })
+      mid.setTopLeft({ x: fvf.x + fvf.width / 3 + 1, y: fvf.y })
 
 
       var rf = right.frame()
-      right.setSize({width: fvf.width/3-1, height : fvf.height})
-      right.setTopLeft({x: fvf.x + fvf.width/3 * 2 +2, y : fvf.y})
+      right.setSize({ width: fvf.width / 3 - 1, height: fvf.height })
+      right.setTopLeft({ x: fvf.x + fvf.width / 3 * 2 + 2, y: fvf.y })
    }
 
-   if(nfws.length == 4) {
+   if (nfws.length == 4) {
       // 4宫格
-      tl= nfws[0]
-      tr= nfws[1]
-      bl= nfws[2]
-      br= nfws[3]
+      tl = nfws[0]
+      tr = nfws[1]
+      bl = nfws[2]
+      br = nfws[3]
 
       var fvf = tl.screen().flippedVisibleFrame()
 
       var tlf = tl.frame()
-      tl.setSize({width: fvf.width/2-1, height : fvf.height/2-1})
-      tl.setTopLeft({x: fvf.x, y : fvf.y})
+      tl.setSize({ width: fvf.width / 2 - 1, height: fvf.height / 2 - 1 })
+      tl.setTopLeft({ x: fvf.x, y: fvf.y })
 
       var trf = tr.frame()
-      tr.setSize({width: fvf.width/2-1, height : fvf.height/2-1})
-      tr.setTopLeft({x: fvf.x + fvf.width/2 + 1, y : fvf.y})
+      tr.setSize({ width: fvf.width / 2 - 1, height: fvf.height / 2 - 1 })
+      tr.setTopLeft({ x: fvf.x + fvf.width / 2 + 1, y: fvf.y })
 
       var blf = bl.frame()
-      bl.setSize({width: fvf.width/2-1, height : fvf.height/2-1})
-      bl.setTopLeft({x: fvf.x, y : fvf.y + fvf.height/2+1})
+      bl.setSize({ width: fvf.width / 2 - 1, height: fvf.height / 2 - 1 })
+      bl.setTopLeft({ x: fvf.x, y: fvf.y + fvf.height / 2 + 1 })
 
       var brf = br.frame()
-      br.setSize({width: fvf.width/2-1, height : fvf.height/2-1})
-      br.setTopLeft({x: fvf.x + fvf.width/2 + 1, y : fvf.y + fvf.height/2+1})
+      br.setSize({ width: fvf.width / 2 - 1, height: fvf.height / 2 - 1 })
+      br.setTopLeft({ x: fvf.x + fvf.width / 2 + 1, y: fvf.y + fvf.height / 2 + 1 })
    }
 }
 
-function test_fullscreen() {
-}
-
 // Test
-keys.push(new Key('g', ['ctrl','cmd'], function() {
+keys.push(new Key('g', ['ctrl', 'cmd'], function () {
    test_screen()
 }));
 // vim: set ft=javascript sw=3:
