@@ -586,17 +586,12 @@ var test_screen = function() {
    //Phoenix.log(JSON.stringify(flippedFrame))
    //Phoenix.log(JSON.stringify(flippedVisibleFrame))
 
-   log(space.hash())
-
-   log(windows)
    if(windows.length ==1) {
-      var win = windows[0]
       log(win.title())
    }
 
    nfws = _.filter(windows, function(it) {return it.app().bundleIdentifier() != "com.apple.finder"})
    
-   log(nfws.length)
 
    if(nfws.length == 1) {
       _.map(nfws, function(it) {it.maximize()})
