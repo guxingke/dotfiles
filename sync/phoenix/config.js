@@ -41,6 +41,10 @@ CONFIG = {
             {
                 "key": ',',
                 "name": 'MailMaster'
+            },
+            {
+                "key": '.',
+                "name": 'QQMusic'
             }
         ]
     }
