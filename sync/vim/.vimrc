@@ -1,4 +1,3 @@
-
 " leader
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
@@ -15,8 +14,8 @@ filetype on
 filetype plugin on
 filetype indent on
 
-" base
-set nocompatible                " don't bother with vi compatibility
+" base set nocompatible                " don't bother with vi compatibility
+set hidden
 set autoread                    " reload files when changed on disk, i.e. via `git checkout`
 set shortmess=atI
 
@@ -29,6 +28,16 @@ set noerrorbells                " don't beep
 set visualbell t_vb=            " turn off error beep/flash
 set t_vb=
 set tm=500
+
+call plug#begin('~/.vim/plugged')
+Plug 'vim-airline/vim-airline'
+Plug 'dracula/vim', { 'as': 'dracula' }
+" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+Plug 'junegunn/vim-easy-align'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'yianwillis/vimcdoc'
+call plug#end()
 
 " show location
 set cursorcolumn
@@ -86,7 +95,6 @@ set backspace=indent,eol,start  " make that backspace key work the way it should
 set whichwrap+=<,>,h,l
 
 " keymap
-
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
@@ -100,3 +108,17 @@ nnoremap L $
 cnoremap <C-j> <t_kd>
 cnoremap <C-k> <t_ku>
 cnoremap <C-a> <Home>
+
+" plugin cfg
+" NERDTree
+map <leader>ft :NERDTreeToggle<CR>
+
+" color 
+color dracula
+
+" easey align
+au FileType markdown vmap <Leader><Bslash> :EasyAlign*<Bar><Enter>
+
+" path
+set path+=**
+noremap ; :find<space>

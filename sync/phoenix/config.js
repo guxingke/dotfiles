@@ -28,7 +28,7 @@ CONFIG = {
             },
             {
                 "key": '9',
-                "name": 'Visual Studio Code'
+                "name": 'Emacs'
             },
             {
                 "key": 'u',
@@ -44,7 +44,7 @@ CONFIG = {
             },
             {
                 "key": '.',
-                "name": 'QQMusic'
+                "name": 'NeteaseMusic'
             }
         ]
     }
