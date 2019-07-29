@@ -35,7 +35,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'junegunn/vim-easy-align'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'yianwillis/vimcdoc'
 Plug 'morhetz/gruvbox'
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
