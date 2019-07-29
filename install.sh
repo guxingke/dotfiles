@@ -17,6 +17,8 @@ set -o pipefail
 set -o nounset
 
 # vim config
+echo 'install plug'
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ln -sf ${__dir}/sync/vim/.vimrc $HOME/.vimrc
 
 # phoenix config

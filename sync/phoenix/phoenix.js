@@ -10,6 +10,7 @@ var mash = ["alt"];
 var mashShift = ["alt", "shift"];
 var mashCtrl = ["alt", "ctrl"];
 var cmdCtrl = ['cmd', 'ctrl'];
+var shiftCmdCtrl = ['shift', 'cmd', 'ctrl'];
 
 var ACTIVE_WINDOWS_TIMES = {};
 var A_BIG_PIXEL = 10000;
@@ -384,7 +385,7 @@ keys.push(new Key('g', cmdCtrl, function () {
 }));
 
 // Previous Window in One Screen
-keys.push(new Key('k', mash, function () {
+keys.push(new Key('k', shiftCmdCtrl, function () {
    var window = Window.focused();
    if (!window) {
       if (Window.recent().length == 0) return;
@@ -401,7 +402,7 @@ keys.push(new Key('k', mash, function () {
 }));
 
 // Next Window in One Screen
-keys.push(new Key('j', mash, function () {
+keys.push(new Key('j', shiftCmdCtrl, function () {
    var window = Window.focused();
    if (!window) {
       if (Window.recent().length == 0) return;
