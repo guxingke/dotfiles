@@ -1,4 +1,3 @@
-
 " leader
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
@@ -15,8 +14,8 @@ filetype on
 filetype plugin on
 filetype indent on
 
-" base
-set nocompatible                " don't bother with vi compatibility
+" base set nocompatible                " don't bother with vi compatibility
+set hidden
 set autoread                    " reload files when changed on disk, i.e. via `git checkout`
 set shortmess=atI
 
@@ -29,6 +28,25 @@ set noerrorbells                " don't beep
 set visualbell t_vb=            " turn off error beep/flash
 set t_vb=
 set tm=500
+
+call plug#begin('~/.vim/plugged')
+Plug 'vim-airline/vim-airline'
+" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+Plug 'junegunn/vim-easy-align'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'yianwillis/vimcdoc'
+Plug 'morhetz/gruvbox'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+  Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+endif
+let g:deoplete#enable_at_startup = 1
+call plug#end()
 
 " show location
 set cursorcolumn
@@ -100,19 +118,13 @@ cnoremap <C-j> <t_kd>
 cnoremap <C-k> <t_ku>
 cnoremap <C-a> <Home>
 
-call plug#begin('~/.vim/plugged')
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'morhetz/gruvbox'
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-  Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
-endif
-let g:deoplete#enable_at_startup = 1
 
-call plug#end()
-
+" plugin cfg
+" color 
 colorscheme gruvbox
+" NERDTree
+map <leader>ft :NERDTreeToggle<CR>
+
+" path
+set path+=**
+noremap ; :find<space>
