@@ -19,5 +19,8 @@ set -o nounset
 # vim config
 ln -sf ${__dir}/sync/vim $HOME/.vim
 
+# nvim config
+ln -sf ${__dir}/sync/vim $HOME/.config/nvim
+
 # phoenix config
 ln -snf ${__dir}/sync/phoenix $HOME/.config/phoenix
