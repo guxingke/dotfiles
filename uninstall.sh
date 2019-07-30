@@ -8,16 +8,15 @@ __root="$(cd "$(dirname "${__dir}")" && pwd)"
 echo "$__dir"
 echo 
 
-# ln 
-# file e.g: ln -sf sync/vim/.vimrc $HOME/.vimrc
-# dir e.g: ln -snf sync/vim/.vim $HOME/.vim
 
 set -o errexit
 set -o pipefail
 set -o nounset
 
 # vim config
-ln -sf ${__dir}/sync/vim $HOME/.vim
+rm $HOME/.vim
+#ln -sf ${__dir}/sync/vim $HOME/.vim
 
 # phoenix config
-ln -snf ${__dir}/sync/phoenix $HOME/.config/phoenix
+rm $HOME/.config/phoenix
+#ln -snf ${__dir}/sync/phoenix $HOME/.config/phoenix
