@@ -101,6 +101,9 @@ cnoremap <C-a> <Home>
 set path+=**
 noremap ; :Rg<CR>
 
+" clipboard
+set clipboard=unnamed
+
 call plug#begin('~/.vim/plugged')
 Plug 'vim-airline/vim-airline'
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
@@ -140,3 +143,7 @@ let g:fzf_action = { 'ctrl-e': 'edit' }
 if has("nvim")
   set guicursor=
 endif
+
+" gui
+map <D-1> :NERDTreeToggle<CR>
+set guifont=Source\ Code\ Pro:h14
