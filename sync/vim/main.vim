@@ -113,6 +113,8 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'morhetz/gruvbox'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'mhinz/vim-startify'
+Plug 'dhruvasagar/vim-table-mode'
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -147,3 +149,10 @@ endif
 " gui
 map <D-1> :NERDTreeToggle<CR>
 set guifont=Source\ Code\ Pro:h14
+
+" table mode
+let g:table_mode_motion_up_map = '<S-CR>'
+let g:table_mode_motion_down_map = '<CR>'
+let g:table_mode_motion_left_map = '<S-Tab>'
+let g:table_mode_motion_right_map = '<Tab>'
+

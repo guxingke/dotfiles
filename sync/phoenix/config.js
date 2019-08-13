@@ -28,7 +28,7 @@ CONFIG = {
             },
             {
                 "key": '9',
-                "name": 'Emacs'
+                "name": 'MacVim'
             },
             {
                 "key": 'u',
