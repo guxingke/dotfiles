@@ -44,7 +44,7 @@ CONFIG = {
             },
             {
                 "key": '.',
-                "name": 'QQ音乐'
+                "name": 'QQMusic'
             }
         ]
     }
