@@ -83,10 +83,10 @@ set backspace=indent,eol,start  " make that backspace key work the way it should
 set whichwrap+=<,>,h,l
 
 " keymap
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+noremap <C-j> <C-W>j
+noremap <C-k> <C-W>k
+noremap <C-h> <C-W>h
+noremap <C-l> <C-W>l
 
 " Shift+H goto head of the line, Shift+L goto end of the line
 nnoremap H ^
@@ -115,6 +115,7 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-startify'
 Plug 'dhruvasagar/vim-table-mode'
+Plug 'NLKNguyen/papercolor-theme'
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -132,7 +133,8 @@ call plug#end()
 
 " plugin cfg
 " color 
-colorscheme gruvbox
+colorscheme PaperColor
+
 " NERDTree
 map <leader>1 :NERDTreeToggle<CR>
 
@@ -147,12 +149,28 @@ if has("nvim")
 endif
 
 " gui
-map <D-1> :NERDTreeToggle<CR>
+noremap <D-1> :NERDTreeToggle<CR>
+noremap <D-2> :NERDTreeFind<CR>
+
+" alt 映射问题: 输入方式为：按下 Crtl+v后在按下 Alt+key（你想设置的键）
+" alt + h
+noremap ˙ :tabprevious<CR>
+" alt + l
+noremap ¬ :tabnext<CR>
+
+
 set guifont=Source\ Code\ Pro:h14
 
 " table mode
 let g:table_mode_motion_up_map = '<S-CR>'
 let g:table_mode_motion_down_map = '<CR>'
-let g:table_mode_motion_left_map = '<S-Tab>'
-let g:table_mode_motion_right_map = '<Tab>'
+let g:table_mode_corner = '|'
 
+noremap <leader>tt :TableModeToggle<cr>
+
+" vimrc
+noremap <leader>q <esc>:wq!<cr>
+noremap <leader>w <esc>:w!<cr>
+
+noremap <leader>ev :vsplit $HOME/.vim/main.vim<cr>
+noremap <leader>sv :source $MYVIMRC<cr>
