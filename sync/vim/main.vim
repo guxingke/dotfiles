@@ -99,7 +99,7 @@ cnoremap <C-a> <Home>
 
 " path
 set path+=**
-noremap ; :Rg<CR>
+"noremap ; :Rg<CR>
 
 " clipboard
 set clipboard=unnamed
@@ -111,8 +111,8 @@ Plug 'junegunn/vim-easy-align'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'morhetz/gruvbox'
-Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'
+" Plug '/usr/local/opt/fzf'
+" Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-startify'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'NLKNguyen/papercolor-theme'
@@ -129,6 +129,8 @@ endif
 let g:deoplete#enable_at_startup = 1
 
 Plug 'pearofducks/ansible-vim'
+Plug 'aserebryakov/vim-todo-lists'
+Plug 'liuchengxu/vim-clap'
 call plug#end()
 
 " plugin cfg
@@ -137,11 +139,17 @@ colorscheme PaperColor
 
 " NERDTree
 map <leader>1 :NERDTreeToggle<CR>
+map <leader>2 :NERDTreeFind<CR>
+
+" Clap
+noremap ; :Clap<CR>
+noremap <C-p> :Clap grep<CR>
+noremap <D-e> :Clap history<CR>
 
 " FZF
-nnoremap <silent> <C-p> :Files<CR>
-nmap <C-e> :Buffers<CR>
-let g:fzf_action = { 'ctrl-e': 'edit' }
+"nnoremap <silent> <C-p> :Files<CR>
+"nmap <C-e> :Buffers<CR>
+"let g:fzf_action = { 'ctrl-e': 'edit' }
 
 " nvim
 if has("nvim")
