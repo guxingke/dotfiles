@@ -109,11 +109,11 @@ call plug#begin('~/.vim/plugged')
 Plug 'vim-airline/vim-airline'
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 Plug 'junegunn/vim-easy-align'
-Plug 'scrooloose/nerdcommenter'
+
+Plug 'easymotion/vim-easymotion'
+
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'morhetz/gruvbox'
-" Plug '/usr/local/opt/fzf'
-" Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-startify'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'NLKNguyen/papercolor-theme'
@@ -145,17 +145,12 @@ map <leader>1 :NERDTreeToggle<CR>
 map <leader>2 :NERDTreeFind<CR>
 
 " git blame
-nnoremap <leader>gb :<C-u>call gitblame#echo()<CR>
+noremap <leader>gb :<C-u>call gitblame#echo()<CR>
 
 " Clap
 noremap ; :Clap<CR>
 noremap <C-p> :Clap files<CR>
 noremap <C-e> :Clap history<CR>
-
-" FZF
-"nnoremap <silent> <C-p> :Files<CR>
-"nmap <C-e> :Buffers<CR>
-"let g:fzf_action = { 'ctrl-e': 'edit' }
 
 " nvim
 if has("nvim")
@@ -180,7 +175,17 @@ let g:table_mode_motion_up_map = '<S-CR>'
 let g:table_mode_motion_down_map = '<CR>'
 let g:table_mode_corner = '|'
 
-noremap <leader>tt :TableModeToggle<cr>
+noremap <Leader>tt :TableModeToggle<CR>
+
+" easy motion
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" Jump to anywhere you want with minimal keystrokes, with just one key binding.
+" `s{char}{label}`
+nmap f <Plug>(easymotion-overwin-f)
+
+let g:EasyMotion_smartcase = 1
+map J <Plug>(easymotion-bd-jk)
+map K <Plug>(easymotion-bd-jk)
 
 " vimrc
 noremap <leader>q <esc>:wq!<cr>
