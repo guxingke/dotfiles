@@ -133,6 +133,7 @@ Plug 'pearofducks/ansible-vim'
 Plug 'aserebryakov/vim-todo-lists'
 Plug 'liuchengxu/vim-clap'
 Plug 'zimbatm/haproxy.vim'
+Plug 'zivyangll/git-blame.vim'
 call plug#end()
 
 " plugin cfg
@@ -142,6 +143,9 @@ colorscheme PaperColor
 " NERDTree
 map <leader>1 :NERDTreeToggle<CR>
 map <leader>2 :NERDTreeFind<CR>
+
+" git blame
+nnoremap <leader>gb :<C-u>call gitblame#echo()<CR>
 
 " Clap
 noremap ; :Clap<CR>
