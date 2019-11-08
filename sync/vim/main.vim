@@ -132,6 +132,7 @@ let g:deoplete#enable_at_startup = 1
 Plug 'pearofducks/ansible-vim'
 Plug 'aserebryakov/vim-todo-lists'
 Plug 'liuchengxu/vim-clap'
+Plug 'zimbatm/haproxy.vim'
 call plug#end()
 
 " plugin cfg
@@ -144,8 +145,8 @@ map <leader>2 :NERDTreeFind<CR>
 
 " Clap
 noremap ; :Clap<CR>
-noremap <C-p> :Clap grep<CR>
-noremap <D-e> :Clap history<CR>
+noremap <C-p> :Clap files<CR>
+noremap <C-e> :Clap history<CR>
 
 " FZF
 "nnoremap <silent> <C-p> :Files<CR>
