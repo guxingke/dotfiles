@@ -1,0 +1,37 @@
+
+# prefix snippet
+snippet cliapp "default cli app" b
+public class `!p snip.rv = snip.basename` {
+  public static void main(String[] args) {
+	  $0
+	}
+}
+endsnippet
+
+snippet cls "default class" b
+public class `!p snip.rv = snip.basename` {
+	$0
+}
+endsnippet
+
+snippet main "java main entry" b
+public static void main(String[] args) {
+  ${0:"hi"}
+}
+endsnippet
+
+snippet sout "sout" b
+System.out.println($0);
+endsnippet
+
+# postfix snippet
+snippet "([^\s]\w+)\.sout" "sout" r
+System.out.println(`!p snip.rv = match.group(1)`);
+$0
+endsnippet
+
+snippet "([^\s]\w+)\.class" "class define" r
+public class `!p snip.rv = match.group(1)` {
+  $0
+}
+endsnippet

@@ -134,6 +134,8 @@ Plug 'aserebryakov/vim-todo-lists'
 Plug 'liuchengxu/vim-clap'
 Plug 'zimbatm/haproxy.vim'
 Plug 'zivyangll/git-blame.vim'
+
+Plug 'SirVer/ultisnips'
 call plug#end()
 
 " plugin cfg
