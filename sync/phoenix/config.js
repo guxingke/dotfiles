@@ -36,7 +36,11 @@ CONFIG = {
             },
             {
                 "key": 'i',
-                "name": 'QQ'
+                "name": 'Feishu'
+            },
+            {
+                "key": 'o',
+                "name": 'Telegram'
             },
             {
                 "key": ',',

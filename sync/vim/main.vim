@@ -136,6 +136,8 @@ Plug 'zimbatm/haproxy.vim'
 Plug 'zivyangll/git-blame.vim'
 
 Plug 'SirVer/ultisnips'
+
+Plug 'junegunn/goyo.vim'
 call plug#end()
 
 " plugin cfg
