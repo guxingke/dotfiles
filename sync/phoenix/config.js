@@ -40,7 +40,7 @@ CONFIG = {
             },
             {
                 "key": 'o',
-                "name": 'Telegram'
+                "name": 'QQ'
             },
             {
                 "key": ',',
