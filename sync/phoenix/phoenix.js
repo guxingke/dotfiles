@@ -238,7 +238,7 @@ function moveCurrentWindowToNextSpace() {
    ts.addWindows([win])
    win.focus()
 }
-Key.on('n', ['cmd', 'ctrl'], moveCurrentWindowToNextSpace)
+Key.on('n', mashShift, moveCurrentWindowToNextSpace)
 
 function moveCurrentWindowToPrewSpace() {
    var win = getCurrentWindow();
@@ -259,7 +259,7 @@ function moveCurrentWindowToPrewSpace() {
    win.focus()
 }
 
-Key.on('p', ['cmd', 'ctrl'], moveCurrentWindowToPrewSpace)
+Key.on('p', mashShift, moveCurrentWindowToPrewSpace)
 
 /**
  * My Configuartion Window
@@ -423,7 +423,7 @@ keys.push(new Key('j', shiftCmdCtrl, function () {
  * My Configuartion Mouse
  */
 // Central Mouse
-keys.push(new Key('m', cmdCtrl, function () {
+keys.push(new Key('m', mashShift, function () {
    var window = getCurrentWindow();
    if (window === undefined) {
       return;

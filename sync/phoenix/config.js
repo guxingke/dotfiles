@@ -19,12 +19,16 @@ CONFIG = {
                 "name": 'Paw'
             },
             {
-                "key": '7',
+                "key": '4',
                 "name": 'PyCharm'
             },
             {
+                "key": '7',
+                "name": 'DataGrip'
+            },
+            {
                 "key": '8',
-                "name": 'MarkEditor'
+                "name": 'Notion'
             },
             {
                 "key": '9',

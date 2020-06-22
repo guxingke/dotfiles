@@ -153,7 +153,8 @@ noremap <leader>gb :<C-u>call gitblame#echo()<CR>
 
 " Clap
 noremap ; :Clap<CR>
-noremap <C-p> :Clap files<CR>
+noremap <leader>p :Clap files<cr>
+noremap <leader>e :Clap files<cr>
 noremap <C-e> :Clap history<CR>
 
 " nvim
