@@ -7,6 +7,7 @@ syntax on
 
 " history : how many lines of history VIM has to remember
 set history=2000
+set pyxversion=3
 
 " filetype
 filetype on
@@ -138,6 +139,12 @@ Plug 'zivyangll/git-blame.vim'
 Plug 'SirVer/ultisnips'
 
 Plug 'junegunn/goyo.vim'
+
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'skywind3000/gutentags_plus'
+
+Plug 'liuchengxu/vista.vim'
+
 call plug#end()
 
 " plugin cfg
@@ -173,7 +180,7 @@ noremap ˙ :tabprevious<CR>
 noremap ¬ :tabnext<CR>
 
 
-set guifont=Source\ Code\ Pro:h14
+set guifont=SauceCodePro\ Nerd\ Font:h14
 
 " table mode
 let g:table_mode_motion_up_map = '<S-CR>'
@@ -198,3 +205,16 @@ noremap <leader>w <esc>:w!<cr>
 
 noremap <leader>ev :vsplit $HOME/.vim/main.vim<cr>
 noremap <leader>sv :source $MYVIMRC<cr>
+
+
+" enable gtags module
+let g:gutentags_modules = ['ctags', 'gtags_cscope']
+
+" config project root markers.
+let g:gutentags_project_root = ['.root']
+
+" generate datebases in my cache directory, prevent gtags files polluting my project
+let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+" change focus to quickfix window after search (optional).
+let g:gutentags_plus_switch = 1
