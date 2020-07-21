@@ -78,7 +78,7 @@ set formatoptions+=B
 set completeopt=longest,menu
 set wildmenu                           " show a navigable menu for tab completion"
 set wildmode=longest,list,full
-set wildignore=*.o,*~,*.pyc,*.class
+set wildignore=*.o,*~,*.pyc,*.class,*.lo
 
 " others
 set backspace=indent,eol,start  " make that backspace key work the way it should
@@ -144,7 +144,7 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'skywind3000/gutentags_plus'
 
 Plug 'liuchengxu/vista.vim'
-
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 " plugin cfg
