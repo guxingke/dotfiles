@@ -170,8 +170,12 @@ if has("nvim")
 endif
 
 " gui
+" toggle file tree
 noremap <D-1> :NERDTreeToggle<CR>
+" find anchor for current file
 noremap <D-2> :NERDTreeFind<CR>
+" toggle taglist 
+noremap <D-3> :Vista!!<CR>
 
 " alt 映射问题: 输入方式为：按下 Crtl+v后在按下 Alt+key（你想设置的键）
 " alt + h
@@ -193,7 +197,10 @@ noremap <Leader>tt :TableModeToggle<CR>
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 " Jump to anywhere you want with minimal keystrokes, with just one key binding.
 " `s{char}{label}`
-nmap f <Plug>(easymotion-overwin-f)
+nmap f <Plug>(easymotion-overwin-f2)
+
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
 
 let g:EasyMotion_smartcase = 1
 map J <Plug>(easymotion-bd-jk)
