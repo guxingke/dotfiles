@@ -145,6 +145,10 @@ Plug 'skywind3000/gutentags_plus'
 
 Plug 'liuchengxu/vista.vim'
 Plug 'ryanoasis/vim-devicons'
+
+Plug 'vimwiki/vimwiki'
+Plug 'bot-tarzan/graph-easy-vim'
+Plug 'hotoo/pangu.vim'
 call plug#end()
 
 " plugin cfg
@@ -225,3 +229,8 @@ let g:gutentags_cache_dir = expand('~/.cache/tags')
 
 " change focus to quickfix window after search (optional).
 let g:gutentags_plus_switch = 1
+
+let g:vimwiki_key_mappings = 
+      \{
+      \  "table_mappings": 0
+      \}
