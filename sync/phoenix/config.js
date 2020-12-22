@@ -56,7 +56,7 @@ CONFIG = {
       },
       {
         "key": '.',
-        "name": 'NeteaseMusic'
+        "name": 'QQMusic'
       }
     ]
   },

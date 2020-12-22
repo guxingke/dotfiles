@@ -66,6 +66,10 @@ set shiftwidth=2
 set tabstop=2
 set softtabstop=2                " insert mode tab and backspace use 2 spaces
 
+" fold
+set foldmethod=syntax
+set nofoldenable
+
 
 " encoding
 set encoding=utf-8
@@ -89,6 +93,8 @@ noremap <C-j> <C-W>j
 noremap <C-k> <C-W>k
 noremap <C-h> <C-W>h
 noremap <C-l> <C-W>l
+noremap <C-v> <C-W>v
+noremap <C-s> <C-W>s
 
 " Shift+H goto head of the line, Shift+L goto end of the line
 nnoremap H ^
@@ -146,9 +152,15 @@ Plug 'skywind3000/gutentags_plus'
 Plug 'liuchengxu/vista.vim'
 Plug 'ryanoasis/vim-devicons'
 
-Plug 'vimwiki/vimwiki'
-Plug 'bot-tarzan/graph-easy-vim'
 Plug 'hotoo/pangu.vim'
+
+Plug 'aklt/plantuml-syntax'
+
+Plug 'plasticboy/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+
+Plug 'preservim/nerdcommenter'
+Plug '~/toy/vim/plantuml-vim'
 call plug#end()
 
 " plugin cfg
@@ -168,11 +180,6 @@ noremap <leader>p :Clap files<cr>
 noremap <leader>e :Clap files<cr>
 noremap <C-e> :Clap history<CR>
 
-" nvim
-if has("nvim")
-  set guicursor=
-endif
-
 " gui
 " toggle file tree
 noremap <D-1> :NERDTreeToggle<CR>
@@ -180,6 +187,7 @@ noremap <D-1> :NERDTreeToggle<CR>
 noremap <D-2> :NERDTreeFind<CR>
 " toggle taglist 
 noremap <D-3> :Vista!!<CR>
+noremap <D-p> :Clap files<CR>
 
 " alt 映射问题: 输入方式为：按下 Crtl+v后在按下 Alt+key（你想设置的键）
 " alt + h
@@ -196,6 +204,8 @@ let g:table_mode_motion_down_map = '<CR>'
 let g:table_mode_corner = '|'
 
 noremap <Leader>tt :TableModeToggle<CR>
+
+noremap <Leader>z za<CR>
 
 " easy motion
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -220,17 +230,9 @@ noremap <leader>sv :source $MYVIMRC<cr>
 
 " enable gtags module
 let g:gutentags_modules = ['ctags', 'gtags_cscope']
-
 " config project root markers.
 let g:gutentags_project_root = ['.root']
-
 " generate datebases in my cache directory, prevent gtags files polluting my project
 let g:gutentags_cache_dir = expand('~/.cache/tags')
-
 " change focus to quickfix window after search (optional).
 let g:gutentags_plus_switch = 1
-
-let g:vimwiki_key_mappings = 
-      \{
-      \  "table_mappings": 0
-      \}
