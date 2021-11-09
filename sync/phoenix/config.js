@@ -10,17 +10,17 @@ CONFIG = {
         "key": '1',
         "name": 'IntelliJ IDEA'
       },
-      {
-        "key": '2',
-        "name": 'Charles'
-      },
+//      {
+//        "key": '2',
+//        "name": 'Charles'
+//      },
       {
         "key": '3',
         "name": 'Paw'
       },
       {
         "key": '4',
-        "name": 'PyCharm'
+        "name": 'Clion'
       },
       {
         "key": '5',
@@ -44,15 +44,15 @@ CONFIG = {
       },
       {
         "key": 'i',
-        "name": 'Feishu'
+        "name": 'Lark'
       },
       {
         "key": 'o',
-        "name": 'QQ'
+        "name": 'Joplin'
       },
       {
         "key": ',',
-        "name": 'MailMaster'
+        "name": 'Spark'
       },
       {
         "key": '.',

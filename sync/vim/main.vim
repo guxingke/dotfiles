@@ -159,7 +159,7 @@ Plug 'aklt/plantuml-syntax'
 Plug 'plasticboy/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
-Plug 'preservim/nerdcommenter'
+" Plug 'preservim/nerdcommenter'
 Plug '~/toy/vim/plantuml-vim'
 call plug#end()
 
@@ -236,3 +236,6 @@ let g:gutentags_project_root = ['.root']
 let g:gutentags_cache_dir = expand('~/.cache/tags')
 " change focus to quickfix window after search (optional).
 let g:gutentags_plus_switch = 1
+
+" preview
+let g:mkdp_open_to_the_world = 1
