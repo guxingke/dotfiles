@@ -113,81 +113,73 @@ set path+=**
 set clipboard=unnamed
 
 call plug#begin('~/.vim/plugged')
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-Plug 'junegunn/vim-easy-align'
+" Plug 'junegunn/vim-easy-align'
 
-Plug 'easymotion/vim-easymotion'
+" Plug 'easymotion/vim-easymotion'
 
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'morhetz/gruvbox'
-Plug 'mhinz/vim-startify'
-Plug 'dhruvasagar/vim-table-mode'
-Plug 'NLKNguyen/papercolor-theme'
+" Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+" Plug 'morhetz/gruvbox'
+" Plug 'mhinz/vim-startify'
+" Plug 'dhruvasagar/vim-table-mode'
+" Plug 'NLKNguyen/papercolor-theme'
 
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-  Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
-endif
 
-let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_at_startup = 1
 
-Plug 'pearofducks/ansible-vim'
-Plug 'aserebryakov/vim-todo-lists'
-Plug 'liuchengxu/vim-clap'
-Plug 'zimbatm/haproxy.vim'
-Plug 'zivyangll/git-blame.vim'
+" Plug 'pearofducks/ansible-vim'
+" Plug 'aserebryakov/vim-todo-lists'
+" Plug 'liuchengxu/vim-clap'
+" Plug 'zimbatm/haproxy.vim'
+" Plug 'zivyangll/git-blame.vim'
 
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 
-Plug 'junegunn/goyo.vim'
+" Plug 'junegunn/goyo.vim'
 
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'skywind3000/gutentags_plus'
+" Plug 'ludovicchabant/vim-gutentags'
+" Plug 'skywind3000/gutentags_plus'
 
-Plug 'liuchengxu/vista.vim'
-Plug 'ryanoasis/vim-devicons'
+" Plug 'liuchengxu/vista.vim'
+" Plug 'ryanoasis/vim-devicons'
 
-Plug 'hotoo/pangu.vim'
+" Plug 'hotoo/pangu.vim'
 
-Plug 'aklt/plantuml-syntax'
+" Plug 'aklt/plantuml-syntax'
 
-Plug 'plasticboy/vim-markdown'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+" Plug 'plasticboy/vim-markdown'
+" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
 " Plug 'preservim/nerdcommenter'
-Plug '~/toy/vim/plantuml-vim'
+" Plug '~/toy/vim/plantuml-vim'
 call plug#end()
 
 " plugin cfg
 " color 
-colorscheme PaperColor
+" colorscheme PaperColor
 
 " NERDTree
-map <leader>1 :NERDTreeToggle<CR>
-map <leader>2 :NERDTreeFind<CR>
+" map <leader>1 :NERDTreeToggle<CR>
+" map <leader>2 :NERDTreeFind<CR>
 
 " git blame
-noremap <leader>gb :<C-u>call gitblame#echo()<CR>
+" noremap <leader>gb :<C-u>call gitblame#echo()<CR>
 
 " Clap
-noremap ; :Clap<CR>
-noremap <leader>p :Clap files<cr>
-noremap <leader>e :Clap files<cr>
-noremap <C-e> :Clap history<CR>
+" noremap ; :Clap<CR>
+" noremap <leader>p :Clap files<cr>
+" noremap <leader>e :Clap files<cr>
+" noremap <C-e> :Clap history<CR>
 
 " gui
 " toggle file tree
-noremap <D-1> :NERDTreeToggle<CR>
+" noremap <D-1> :NERDTreeToggle<CR>
 " find anchor for current file
-noremap <D-2> :NERDTreeFind<CR>
+" noremap <D-2> :NERDTreeFind<CR>
 " toggle taglist 
-noremap <D-3> :Vista!!<CR>
-noremap <D-p> :Clap files<CR>
+" noremap <D-3> :Vista!!<CR>
+" noremap <D-p> :Clap files<CR>
 
 " alt 映射问题: 输入方式为：按下 Crtl+v后在按下 Alt+key（你想设置的键）
 " alt + h
@@ -199,43 +191,43 @@ noremap ¬ :tabnext<CR>
 set guifont=SauceCodePro\ Nerd\ Font:h14
 
 " table mode
-let g:table_mode_motion_up_map = '<S-CR>'
-let g:table_mode_motion_down_map = '<CR>'
-let g:table_mode_corner = '|'
+" let g:table_mode_motion_up_map = '<S-CR>'
+" let g:table_mode_motion_down_map = '<CR>'
+" let g:table_mode_corner = '|'
 
-noremap <Leader>tt :TableModeToggle<CR>
+" noremap <Leader>tt :TableModeToggle<CR>
 
-noremap <Leader>z za<CR>
+" noremap <Leader>z za<CR>
 
 " easy motion
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" let g:EasyMotion_do_mapping = 0 " Disable default mappings
 " Jump to anywhere you want with minimal keystrokes, with just one key binding.
 " `s{char}{label}`
-nmap f <Plug>(easymotion-overwin-f2)
+" nmap f <Plug>(easymotion-overwin-f2)
 
-map  / <Plug>(easymotion-sn)
-omap / <Plug>(easymotion-tn)
+" map  / <Plug>(easymotion-sn)
+" omap / <Plug>(easymotion-tn)
 
-let g:EasyMotion_smartcase = 1
-map J <Plug>(easymotion-bd-jk)
-map K <Plug>(easymotion-bd-jk)
+" let g:EasyMotion_smartcase = 1
+" map J <Plug>(easymotion-bd-jk)
+" map K <Plug>(easymotion-bd-jk)
 
 " vimrc
-noremap <leader>q <esc>:wq!<cr>
-noremap <leader>w <esc>:w!<cr>
+" noremap <leader>q <esc>:wq!<cr>
+" noremap <leader>w <esc>:w!<cr>
 
-noremap <leader>ev :vsplit $HOME/.vim/main.vim<cr>
-noremap <leader>sv :source $MYVIMRC<cr>
+" noremap <leader>ev :vsplit $HOME/.vim/main.vim<cr>
+" noremap <leader>sv :source $MYVIMRC<cr>
 
 
 " enable gtags module
-let g:gutentags_modules = ['ctags', 'gtags_cscope']
+" let g:gutentags_modules = ['ctags', 'gtags_cscope']
 " config project root markers.
-let g:gutentags_project_root = ['.root']
+" let g:gutentags_project_root = ['.root']
 " generate datebases in my cache directory, prevent gtags files polluting my project
-let g:gutentags_cache_dir = expand('~/.cache/tags')
+" let g:gutentags_cache_dir = expand('~/.cache/tags')
 " change focus to quickfix window after search (optional).
-let g:gutentags_plus_switch = 1
+" let g:gutentags_plus_switch = 1
 
 " preview
-let g:mkdp_open_to_the_world = 1
+" let g:mkdp_open_to_the_world = 1
