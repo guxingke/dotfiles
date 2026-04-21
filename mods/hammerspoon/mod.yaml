@@ -1,0 +1,2 @@
+mode: copy
+post: "open -g hammerspoon://reload"
