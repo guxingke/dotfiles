@@ -72,3 +72,6 @@ eval "$(starship init zsh)"
 
 # --- local ---
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# Atuin - shell history
+eval "$(atuin init zsh)"
