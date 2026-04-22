@@ -51,6 +51,21 @@ eval "$(fnm env --use-on-cd --shell zsh)"
 # --- zoxide ---
 eval "$(zoxide init zsh --cmd j)"
 
+# --- edit command in $EDITOR ---
+autoload -Uz edit-command-line
+function edit-command-line-and-move-end {
+  edit-command-line
+  zle end-of-line
+}
+zle -N edit-command-line-and-move-end
+bindkey '^X^K' edit-command-line-and-move-end
+
+# --- fzf ---
+export FZF_DEFAULT_COMMAND="fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --type f"
+export FZF_CTRL_T_OPTS="--ansi --preview-window 'right:60%' --layout=reverse --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
+export FZF_CTRL_R_OPTS="--layout=reverse --preview-window 'right:60%:wrap' --preview 'echo {}' --bind 'ctrl-y:execute-silent(echo -n {2..} | xargs -I {} mm cmd {})+abort' --color header:italic --header 'Press CTRL-Y to send command into memos'"
+eval "$(fzf --zsh)"
+
 # --- starship ---
 export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
 eval "$(starship init zsh)"
