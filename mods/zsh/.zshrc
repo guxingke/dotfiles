@@ -49,8 +49,9 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # --- fnm ---
 eval "$(fnm env --use-on-cd --shell zsh)"
 
-# --- zoxide ---
-eval "$(zoxide init zsh --cmd j)"
+# --- autojump ---
+# eval "$(zoxide init zsh --cmd j)"   # 留底，便于回滚
+zinit snippet OMZP::autojump
 
 # --- edit command in $EDITOR ---
 autoload -Uz edit-command-line
@@ -75,4 +76,4 @@ eval "$(starship init zsh)"
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 # Atuin - shell history
-eval "$(atuin init zsh)"
+eval "$(atuin init zsh --disable-up-arrow)"
