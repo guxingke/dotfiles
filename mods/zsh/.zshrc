@@ -12,6 +12,7 @@ source "$ZINIT_HOME/zinit.zsh"
 zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
+zinit snippet OMZ::lib/git.zsh
 zinit snippet OMZP::git
 
 # --- completions ---
