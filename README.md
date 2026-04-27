@@ -30,7 +30,7 @@ eval "$(dotfiles _completion zsh)"
 |---|---|
 | `status` | Show sync status of all modules |
 | `diff [name]` | Show diff for one or all modules |
-| `deploy [name]` | Deploy modules to `$HOME` (auto-backups overwritten files) |
+| `deploy [name] [--dry-run]` | Deploy modules to `$HOME` (auto-backups overwritten files) |
 | `pull [name]` | Pull changes from `$HOME` back into mods (tracked files only) |
 | `import <mod> <file> [file...]` | Import existing file(s) into a module |
 | `uninstall <name>` | Remove deployed files from `$HOME` (with backup) |
@@ -88,11 +88,12 @@ Optional per-module configuration:
 ```yaml
 mode: copy              # copy | custom
 pre: "brew list foo"    # Run before deploy, skip module on failure
-post: "open -g hammerspoon://reload"  # Run after deploy
-depends:                # Deploy order dependencies
-  - starship
-ignore:                 # Exclude files (regex)
-  - "*.bak"
+post: "open -g hammerspoon://reload"  # Run after deploy on change
+depends:                # Deploy order dependencies (topo-sorted)
+  - starship            # this module is deployed after `starship`
+ignore:                 # Exclude paths matching JS regex (against path relative to module root, NOT glob)
+  - "\\.bak$"           # any *.bak file
+  - "^cache/"           # the cache/ subdirectory
 ```
 
 ### Local / Private Files

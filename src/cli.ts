@@ -116,14 +116,17 @@ function topoSort(modules: Module[]): Module[] {
 
 function walkFiles(dir: string, ignore?: string[]): string[] {
   const files: string[] = [];
+  const patterns = ignore?.map((p) => new RegExp(p));
 
   function walk(current: string) {
     for (const entry of readdirSync(current, { withFileTypes: true })) {
       if (entry.name === "mod.yaml") continue;
       if (entry.name === "deploy.sh") continue;
-      if (ignore?.some((p) => entry.name.match(new RegExp(p)))) continue;
 
       const full = join(current, entry.name);
+      const rel = relative(dir, full);
+      if (patterns?.some((re) => re.test(rel))) continue;
+
       if (entry.isDirectory()) {
         walk(full);
       } else {
@@ -181,7 +184,11 @@ function filesEqual(a: string, b: string): boolean {
 
 // ── hooks ──
 
-async function runHook(label: string, cmd: string): Promise<boolean> {
+async function runHook(label: string, cmd: string, dryRun = false): Promise<boolean> {
+  if (dryRun) {
+    console.log(`  [WOULD ${label}] ${cmd}`);
+    return true;
+  }
   console.log(`  [${label}] ${cmd}`);
   const proc = Bun.spawn(["bash", "-c", cmd], {
     stdout: "inherit",
@@ -197,9 +204,18 @@ async function runHook(label: string, cmd: string): Promise<boolean> {
 
 // ── deploy backup ──
 
-async function backupOverwritten(root: string, files: { src: string; dst: string; rel: string }[]) {
+async function backupOverwritten(
+  root: string,
+  files: { src: string; dst: string; rel: string }[],
+  dryRun = false,
+) {
   const toBackup = files.filter((f) => existsSync(f.dst) && !filesEqual(f.src, f.dst));
   if (toBackup.length === 0) return;
+
+  if (dryRun) {
+    console.log(`  [WOULD BACKUP] ${toBackup.length} file(s) → pre-deploy-*.tar.gz`);
+    return;
+  }
 
   mkdirSync(BACKUP_DIR, { recursive: true });
   const ts = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
@@ -299,7 +315,7 @@ async function cmdDiff(name?: string) {
   }
 }
 
-async function cmdDeploy(name?: string) {
+async function cmdDeploy(name?: string, dryRun = false) {
   const modules = discoverModules();
   const filtered = name ? modules.filter((m) => m.name === name) : modules;
 
@@ -309,13 +325,19 @@ async function cmdDeploy(name?: string) {
   }
 
   const targets = topoSort(filtered);
+  const failures: { name: string; reason: string }[] = [];
+
+  if (dryRun) console.log("[DRY-RUN] no files will be written, no hooks will run");
 
   for (const mod of targets) {
     console.log(`\n── ${mod.name} ──`);
 
     // pre hook
     if (mod.config.pre) {
-      if (!(await runHook("PRE", mod.config.pre))) continue;
+      if (!(await runHook("PRE", mod.config.pre, dryRun))) {
+        failures.push({ name: mod.name, reason: "pre hook" });
+        continue;
+      }
     }
 
     // custom mode
@@ -323,6 +345,11 @@ async function cmdDeploy(name?: string) {
       const script = join(mod.path, "deploy.sh");
       if (!existsSync(script)) {
         console.log("  [FAIL] deploy.sh not found");
+        failures.push({ name: mod.name, reason: "deploy.sh missing" });
+        continue;
+      }
+      if (dryRun) {
+        console.log(`  [WOULD RUN] bash ${relative(ROOT, script)}`);
         continue;
       }
       const proc = Bun.spawn(["bash", script], {
@@ -333,6 +360,7 @@ async function cmdDeploy(name?: string) {
       const code = await proc.exited;
       if (code !== 0) {
         console.log(`  [FAIL] deploy.sh exited with ${code}`);
+        failures.push({ name: mod.name, reason: `deploy.sh exit ${code}` });
         continue;
       }
       console.log("  [OK] custom deploy done");
@@ -347,28 +375,40 @@ async function cmdDeploy(name?: string) {
     });
 
     // backup files that will be overwritten
-    await backupOverwritten(targetRoot(mod), pending);
+    await backupOverwritten(targetRoot(mod), pending, dryRun);
 
     let copied = 0;
     for (const { src, dst, rel } of pending) {
       if (filesEqual(src, dst)) continue;
 
-      mkdirSync(dirname(dst), { recursive: true });
-      copyFile(src, dst);
-      console.log(`  [COPY] ~/${rel}`);
+      if (dryRun) {
+        console.log(`  [WOULD COPY] ~/${rel}`);
+      } else {
+        mkdirSync(dirname(dst), { recursive: true });
+        copyFile(src, dst);
+        console.log(`  [COPY] ~/${rel}`);
+      }
       copied++;
     }
 
     if (copied === 0) {
       console.log("  [SKIP] already up to date");
     } else {
-      console.log(`  [OK] ${copied} file(s) deployed`);
+      console.log(`  [OK] ${copied} file(s) ${dryRun ? "would be deployed" : "deployed"}`);
     }
 
     // post hook
     if (copied > 0 && mod.config.post) {
-      await runHook("POST", mod.config.post);
+      if (!(await runHook("POST", mod.config.post, dryRun))) {
+        failures.push({ name: mod.name, reason: "post hook" });
+      }
     }
+  }
+
+  if (failures.length > 0) {
+    console.log(`\n[SUMMARY] ${failures.length} failed:`);
+    for (const f of failures) console.log(`  ${f.name} (${f.reason})`);
+    process.exit(1);
   }
 }
 
@@ -622,14 +662,16 @@ const arg = args[1];
 const USAGE = `usage: dotfiles <command> [args]
 
 commands:
-  status              show status of all modules
-  diff [name]         show diff for one or all modules
-  deploy [name]       deploy one or all modules (auto-backups overwritten files)
-  pull [name]         pull changes from $HOME back into mods
-  import <mod> <file> [--target <path>]  import file(s) into a module
-  uninstall <name>    remove deployed files (with backup)
-  backup              backup all local files to ~/backups/dotfiles/
-  restore [file]      list backups or restore from a backup`;
+  status                  show status of all modules
+  diff [name]             show diff for one or all modules
+  deploy [name] [--dry-run]
+                          deploy one or all modules (auto-backups overwritten files)
+  pull [name]             pull changes from $HOME back into mods
+  import <mod> <file> [--target <path>]
+                          import file(s) into a module
+  uninstall <name>        remove deployed files (with backup)
+  backup                  backup all local files to ~/backups/dotfiles/
+  restore [file]          list backups or restore from a backup`;
 
 switch (cmd) {
   case "status":
@@ -638,9 +680,13 @@ switch (cmd) {
   case "diff":
     await cmdDiff(arg);
     break;
-  case "deploy":
-    await cmdDeploy(arg);
+  case "deploy": {
+    const deployArgs = args.slice(1);
+    const dryRun = deployArgs.includes("--dry-run");
+    const deployName = deployArgs.find((a) => !a.startsWith("--"));
+    await cmdDeploy(deployName, dryRun);
     break;
+  }
   case "pull":
     await cmdPull(arg);
     break;
