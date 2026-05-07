@@ -40,6 +40,7 @@ setopt interactive_comments
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias v='nvim'
 
 # --- bun ---
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
