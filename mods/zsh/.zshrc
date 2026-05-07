@@ -40,7 +40,11 @@ setopt interactive_comments
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-alias v='nvim'
+v() {
+  printf '\e[4 q'    # steady underline before nvim takes over
+  command nvim "$@"
+  printf '\e[4 q'    # and after — nvim itself never touches cursor (guicursor='')
+}
 
 # --- bun ---
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"

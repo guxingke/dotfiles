@@ -20,6 +20,7 @@ opt.fillchars = { vert = '│', fold = '·' }
 opt.termguicolors = true
 opt.background = 'dark'
 pcall(vim.cmd.colorscheme, 'habamax')
+opt.guicursor = 'a:hor20-blinkon0'  -- all modes: steady underline (DECSCUSR 4)
 
 -- --- editing ---
 opt.smartindent = true
@@ -81,6 +82,16 @@ au('BufReadPost', {
     end
   end,
 })
+
+au({ 'VimLeave', 'VimSuspend' }, {
+  group = aug('cursorRestore', { clear = true }),
+  callback = function() vim.opt.guicursor = 'a:hor20-blinkon0' end,
+})
+au('VimResume', {
+  group = aug('cursorResume', { clear = true }),
+  callback = function() vim.opt.guicursor = 'a:hor20-blinkon0' end,
+})
+
 
 -- --- keymaps ---
 g.mapleader = ' '
